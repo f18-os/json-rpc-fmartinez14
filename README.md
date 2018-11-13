@@ -2,4 +2,4 @@
 
 This repo contains:
 *  minimal-jsonrpc-demo: A minimalistic jsonrpc client and server
-* graph: your assignment is described in its README.
+* graph: This folder contains the read me and completed assigment.
