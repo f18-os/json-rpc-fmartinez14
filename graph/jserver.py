@@ -41,6 +41,7 @@ class ServerServices(object):
       print ("incrementing ")
       increment(JSONDecryptedTree)
       print ("After incrementing:")
+      print(JSONDecryptedTree)
       JSONDecryptedTree.show(0)
 
   @request

@@ -30,6 +30,7 @@ def jsonEncode(currentNode): #Converts tree to a json list.
 def parseTree(treeStruct , currentNode):
     listChildren = [] #Parses subtree and appends it to the new tree.
     currentNode= treeStruct[list(currentNode.keys())[0]]
+    print(str(id(currentNode)) + " " + currentNode.name)
     if(currentNode != ""):
         for c in currentNode.children:
             listChildren.append(parseTree(treeStruct, c))
