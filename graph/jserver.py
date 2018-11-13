@@ -14,25 +14,34 @@ from bsonrpc.framing import (
 # Class providing functions for the client to use:
 @service_class
 class ServerServices(object):
-  decryptedTree = ""
-  @request
-  def swapper(self, txt):
-    return ''.join(reversed(list(txt)))
+  JSONDecryptedTree = ""
+  treeToUse={}
+
 
   @request
   def obtainJSON(self,txt):
-    global decryptedTree
-    decryptedTree = jsonDecrypt(txt)
-    decryptedTree.show(0)
-    # return decryptedTree
+    global JSONDecryptedTree #Loads a tree and moves it to json decrypted tree.
+    JSONDecryptedTree = json.loads(txt)
+
 
   @request
-  def incrementMe(self):
-      global decryptedTree
+  def obtainDict(self,txt): #Creates all necessary steps for dict.
+     global treeToUse
+     global JSONDecryptedTree
+     treeToUse = json.loads(txt)
+     for x,y in treeToUse.items(): #Iterates across tree objects and adds it to a variable.
+         temp = json.loads(y)
+         treeToUse[x] = node(temp[list(temp.keys())[0]], temp[list(temp.keys())[1]])
+     JSONDecryptedTree = parseTree(treeToUse, JSONDecryptedTree)
+     JSONDecryptedTree.show(0)
+
+  @request
+  def incrementValues(self): #Increments value for the tree.
+      global JSONDecryptedTree
       print ("incrementing ")
-      increment(decryptedTree)
+      increment(JSONDecryptedTree)
       print ("After incrementing:")
-      decryptedTree.show(0)
+      JSONDecryptedTree.show(0)
 
   @request
   def nop(self, txt):

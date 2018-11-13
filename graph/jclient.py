@@ -16,8 +16,9 @@ s.connect(('localhost', 50001))
 rpc = JSONRpc(s,framing_cls=JSONFramingNone)
 server = rpc.get_peer_proxy()
 
-def forwardTree(currentNode):
-    currentTree = jsonEncode(root)
+def forwardTree():
+    currentTree = jsonEncode(root) #Generates JSON string and sends it to server.
+    currentTree = json.dumps(currentTree)
     server.obtainJSON(currentTree)
 
 
@@ -25,13 +26,22 @@ def forwardTree(currentNode):
 
 
 leaf1 = node("firstLeaf")
-leaf2 = node("secondLeaf")
-root = node("root", [leaf1, leaf1, leaf2])
-#Default tree to send
+leaf2 = node("secondLeaf") #Creates tree.
+root = node("root", [leaf1, leaf2])
+
 print ("Forwarding tree to server.")
-forwardTree(root)
+forwardTree()
+
+ReferenceDict = createDict(root) #Send commands to server
+ReferenceDict = json.dumps(ReferenceDict)
+
+print("Sending references")
+
+server.obtainDict(ReferenceDict)
+
 print ("Incrementing tree.")
-server.incrementMe()
+
+server.incrementValues()
 
 
 print(server.nop({1:[2,3]}))

@@ -1,4 +1,4 @@
-import json
+import json,ast
 class node:
     def __init__(self, name, children = []):
         self.name = name
@@ -11,25 +11,36 @@ class node:
 
 
 
-def increment(graph): #Adds 1 to the value of every node in the tree.
+def increment(graph): #Increases value of nodes.
     graph.val += 1;
     for c in graph.children:
         increment(c)
 
-def jsonEncode(currentNode): #Encodes the tree into a JSON string.
-    currNodeChildren = []
+
+def jsonEncode(currentNode): #Converts tree to a json list.
+    listChildren = []
+    myNode = {}
+    if(currentNode != ""):
+        for c in currentNode.children: #Get children as lists instead of objects for encoding.
+            listChildren.append(jsonEncode(c))
+        currentNode.children = listChildren
+        myNode[id(currentNode)] =  json.dumps(currentNode.__dict__)
+        return myNode
+
+def parseTree(treeStruct , currentNode):
+    listChildren = [] #Parses subtree and appends it to the new tree.
+    currentNode= treeStruct[list(currentNode.keys())[0]]
     if(currentNode != ""):
         for c in currentNode.children:
-            currNodeChildren.append(jsonEncode(c))
-        currentNode.children = currNodeChildren
-        return json.dumps(currentNode.__dict__)
+            listChildren.append(parseTree(treeStruct, c))
+        currentNode.children = listChildren
+        return currentNode
 
-def jsonDecrypt(currentNode):
-    currNodeChildren = []
-    if(currentNode != ""):
-        tempNode = json.loads(currentNode)
-        returnNode = node(list(tempNode.values())[0] , list(tempNode.values())[1])
-        for c in returnNode.children:
-            currNodeChildren.append(jsonDecrypt(c))
-        returnNode.children = currNodeChildren
-        return returnNode
+def createDict(currentNode):
+    dictStruc = {} #This method creates a dictionary that contains references and nodes.
+    dictStruc[id(currentNode)] = json.dumps(currentNode.__dict__)
+    for y in currentNode.children:
+        coolNode = list(y.keys())[0]
+        coolNodeChildren = list(y.values())[0]
+        dictStruc[coolNode] = coolNodeChildren
+    return dictStruc
