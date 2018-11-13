@@ -19,16 +19,16 @@ class ServerServices(object):
 
 
   @request
-  def obtainJSON(self,txt):
+  def obtainJSON(self,EncodeMe):
     global JSONDecryptedTree #Loads a tree and moves it to json decrypted tree.
-    JSONDecryptedTree = json.loads(txt)
+    JSONDecryptedTree = json.loads(EncodeMe)
 
 
   @request
-  def obtainDict(self,txt): #Creates all necessary steps for dict.
+  def obtainDict(self,DictRoot): #Creates all necessary steps for dict.
      global treeToUse
      global JSONDecryptedTree
-     treeToUse = json.loads(txt)
+     treeToUse = json.loads(DictRoot)
      for x,y in treeToUse.items(): #Iterates across tree objects and adds it to a variable.
          temp = json.loads(y)
          treeToUse[x] = node(temp[list(temp.keys())[0]], temp[list(temp.keys())[1]])
